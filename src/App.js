@@ -10,6 +10,9 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
 
 const API_KEY = "lbC8bDiXTMX44453DpF69ehH1voKUL8V";
 const API_URL = 'https://api.fullcontact.com/v3/person.enrich';
@@ -26,6 +29,14 @@ const useStyles = theme => ({
   },
   button: {
     margin: theme.spacing(1),
+  },
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
 });
 
@@ -72,10 +83,24 @@ class App extends React.Component {
       search = {
         "profiles" : [{
           "service": "twitter",
-          "username": "bartlorang"
+          "url": "bartlorang"
         }]
       }
-    }  
+    } else if(this.state.searchItem.match(linkedInProfilePattern)) {
+      search = {
+        "profiles": [{
+          "service": "linkedin",
+          "url": ""
+        }]
+      }
+    } else if(this.state.searchItem.match(facebookProfilePattern)) {
+      search = {
+        "profiles": [{
+          "service": "facebook",
+          "url": ""
+        }]
+      }
+    }
 
     axios.post(API_URL, search, {headers: header})
       .then(({ data }) => {
@@ -107,7 +132,7 @@ class App extends React.Component {
                     <SearchIcon />
                   </InputAdornment>
                 )
-                }}
+              }}
             />
             
   
@@ -115,17 +140,27 @@ class App extends React.Component {
             Search
           </Button>
           { this.state.userData && 
-          <table>
-            <tr>
-              <th>Fullname</th>
-              <th>Gender</th>
-            </tr>
-            <tr>
-              <td>{this.state.userData.fullName}</td>
-              <td>{this.state.userData.gender}</td>
-            </tr>  
-          </table>
-        }
+            <div className={classes.root}>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                <Paper className={classes.paper}>{this.state.userData.fullName}</Paper>
+              </Grid>
+              {/* <Grid item xs={6}>
+                <Paper className={classes.paper}>{this.state.userData.avatar}</Paper>
+              </Grid> */}
+              <Grid item xs={6}>
+                <Paper className={classes.paper}>{this.state.userData.title}</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>{this.state.userData.email}</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>{this.state.userData.phones}</Paper>
+              </Grid>
+            </Grid>
+          </div>
+          
+          }
           </React.Fragment>
         </form>
       </div>
