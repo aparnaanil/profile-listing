@@ -48,7 +48,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     dotenv.config();
-    this.state = { searchItem: "", userData: "" };
+    this.state = { searchItem: "", userData: "", isSearched: false };
     this.fetchDetails = this.fetchDetails.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -74,19 +74,17 @@ class App extends React.Component {
       search = {
         phone: searchItem
       };
-    } else if (searchItem.match(twitterProfilePattern)) {
-      if (searchItem.search("twitter")) {
-        search = {
-          profiles: [
-            {
-              service: "twitter",
-              url: searchItem
-            }
-          ]
-        };
-      }
+    } else if (searchItem.indexOf("twitter") > -1) {
+      search = {
+        profiles: [
+          {
+            service: "twitter",
+            url: searchItem
+          }
+        ]
+      };
     } else if (searchItem.match(linkedInProfilePattern)) {
-      if (searchItem.search("linkedin")) {
+      if (searchItem.indexOf("linkedin") > -1) {
         search = {
           profiles: [
             {
@@ -97,7 +95,7 @@ class App extends React.Component {
         };
       }
     } else if (searchItem.match(facebookProfilePattern)) {
-      if (searchItem.search("facebook")) {
+      if (searchItem.indexOf("facebook") > -1) {
         search = {
           profiles: [
             {
@@ -109,11 +107,19 @@ class App extends React.Component {
       }
     }
 
-    axios.post(API_URL, search, { headers: header }).then(({ data }) => {
-      this.setState({
-        userData: data
+    axios
+      .post(API_URL, search, { headers: header })
+      .then(({ data }) => {
+        this.setState({
+          userData: data,
+          isSearched: true
+        });
+      })
+      .catch(err => {
+        this.setState({
+          isSearched: true
+        });
       });
-    });
   };
 
   render() {
@@ -151,7 +157,7 @@ class App extends React.Component {
           </Button>
         </form>
 
-        {this.state.userData && (
+        {this.state.userData && this.state.isSearched && (
           <div className={classes.root}>
             <Grid container spacing={3}>
               <Grid item xs={3}>
@@ -189,22 +195,39 @@ class App extends React.Component {
                 <Grid item xs={12}>
                   <Paper className={classes.paper}>
                     <b>Social Profiles: </b>
-                    {this.state.userData.details.profiles.twitter
+                    <ol className="social-list">
+                      <li>
+                      {this.state.userData.details.profiles.twitter
                       ? this.state.userData.details.profiles.twitter.url
                       : "NIL"}
-                    <Grid item xs={12}>
+                      </li>
+                      <li>
                       {this.state.userData.details.profiles.facebook
                         ? this.state.userData.details.profiles.facebook.url
                         : "NIL"}
-                      ,
-                    </Grid>
-                    <Grid item xs={12}>
+                      </li>
+                      <li>
                       {this.state.userData.details.profiles.linkedin
                         ? this.state.userData.details.profiles.linkedin.url
                         : "NIL"}
-                    </Grid>
+                      </li>
+                    </ol>
+                    
                   </Paper>
                 </Grid>
+              </Grid>
+            </Grid>
+          </div>
+        )}
+        {this.state.isSearched && this.state.userData.details === undefined && (
+          <div className="not-found-div">
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <b>
+                    User data not available. Please search any other profile!
+                  </b>
+                </Paper>
               </Grid>
             </Grid>
           </div>

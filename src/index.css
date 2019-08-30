@@ -39,4 +39,14 @@ form.App-container-1 {
 }
 .App-paper-5 {
   margin-bottom: 15px;
+  width: auto !important;
 }
+.not-found-div .MuiPaper-rounded {
+  width: 110% !important;
+  margin-top: 15px;
+}
+
+.social-list {
+  list-style: none;
+}
+
