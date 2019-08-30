@@ -3,15 +3,9 @@ import axios from "axios";
 import "./App.css";
 import clsx from "clsx";
 import dotenv from "dotenv";
-import {
-  emailPattern,
-  phoneNumPattern,
-  twitterProfilePattern,
-  linkedInProfilePattern,
-  facebookProfilePattern
-} from "./constants";
+import { emailPattern, phoneNumPattern } from "./constants";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
@@ -83,28 +77,24 @@ class App extends React.Component {
           }
         ]
       };
-    } else if (searchItem.match(linkedInProfilePattern)) {
-      if (searchItem.indexOf("linkedin") > -1) {
-        search = {
-          profiles: [
-            {
-              service: "linkedin",
-              url: searchItem
-            }
-          ]
-        };
-      }
-    } else if (searchItem.match(facebookProfilePattern)) {
-      if (searchItem.indexOf("facebook") > -1) {
-        search = {
-          profiles: [
-            {
-              service: "facebook",
-              url: searchItem
-            }
-          ]
-        };
-      }
+    } else if (searchItem.indexOf("linkedin") > -1) {
+      search = {
+        profiles: [
+          {
+            service: "linkedin",
+            url: searchItem
+          }
+        ]
+      };
+    } else if (searchItem.indexOf("facebook") > -1) {
+      search = {
+        profiles: [
+          {
+            service: "facebook",
+            url: searchItem
+          }
+        ]
+      };
     }
 
     axios
@@ -197,22 +187,21 @@ class App extends React.Component {
                     <b>Social Profiles: </b>
                     <ol className="social-list">
                       <li>
-                      {this.state.userData.details.profiles.twitter
-                      ? this.state.userData.details.profiles.twitter.url
-                      : "NIL"}
+                        {this.state.userData.details.profiles.twitter
+                          ? this.state.userData.details.profiles.twitter.url
+                          : "NIL"}
                       </li>
                       <li>
-                      {this.state.userData.details.profiles.facebook
-                        ? this.state.userData.details.profiles.facebook.url
-                        : "NIL"}
+                        {this.state.userData.details.profiles.facebook
+                          ? this.state.userData.details.profiles.facebook.url
+                          : "NIL"}
                       </li>
                       <li>
-                      {this.state.userData.details.profiles.linkedin
-                        ? this.state.userData.details.profiles.linkedin.url
-                        : "NIL"}
+                        {this.state.userData.details.profiles.linkedin
+                          ? this.state.userData.details.profiles.linkedin.url
+                          : "NIL"}
                       </li>
                     </ol>
-                    
                   </Paper>
                 </Grid>
               </Grid>
