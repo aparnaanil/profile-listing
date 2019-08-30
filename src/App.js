@@ -2,8 +2,14 @@ import React from "react";
 import axios from "axios";
 import "./App.css";
 import clsx from "clsx";
-import dotenv from 'dotenv'
-
+import dotenv from 'dotenv';
+import {
+  emailPattern,
+  phoneNumPattern,
+  twitterProfilePattern,
+  linkedInProfilePattern,
+  facebookProfilePattern
+} from './constants';
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -14,9 +20,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 
-const API_KEY = "lbC8bDiXTMX44453DpF69ehH1voKUL8V";
+const API_KEY = process.env.REACT_APP_ENRICH_API_KEY;
 const API_URL = 'https://api.fullcontact.com/v3/person.enrich';
-// console.log(process.env.ENRICH_API_KEY)
+
 
 const useStyles = theme => ({
   container: {
@@ -59,47 +65,44 @@ class App extends React.Component {
     const header = {
       'Authorization': `Bearer ${API_KEY}`
     }
-    const email = {
-      "email" : "bart.lorang@fullcontact.com"
-    }
-
     let search = {};
+    let searchItem = this.state.searchItem
     
-    let emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"; 
-    let phoneNumPattern = "/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im";
-    let facebookProfilePattern = "(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?";
-    let linkedInProfilePattern = "/(ftp|http|https):\/\/?(?:www\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(val)";
-    let twitterProfilePattern = "/http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/";
-
-    if(this.state.searchItem.match(emailPattern)) {
+    if(searchItem.match(emailPattern)) {
       search = {
-        "email": this.state.searchItem
+        "email": searchItem
       }
-    } else if(this.state.searchItem.match(phoneNumPattern)) {
+    } else if(searchItem.match(phoneNumPattern)) {
       search = {
-        "phone": this.state.searchItem
+        "phone": searchItem
       }
-    } else if(this.state.searchItem.match(twitterProfilePattern)) {
-      search = {
-        "profiles" : [{
-          "service": "twitter",
-          "url": "bartlorang"
-        }]
+    } else if(searchItem.match(twitterProfilePattern)) {
+      if(searchItem.search("twitter")) {
+        search = {
+          "profiles" : [{
+            "service": "twitter",
+            "url": searchItem
+          }]
+        }
       }
-    } else if(this.state.searchItem.match(linkedInProfilePattern)) {
-      search = {
-        "profiles": [{
-          "service": "linkedin",
-          "url": ""
-        }]
-      }
-    } else if(this.state.searchItem.match(facebookProfilePattern)) {
-      search = {
-        "profiles": [{
-          "service": "facebook",
-          "url": ""
-        }]
-      }
+    } else if(searchItem.match(linkedInProfilePattern)) {
+      if(searchItem.search("linkedin")) {
+        search = {
+          "profiles": [{
+            "service": "linkedin",
+            "url": searchItem
+          }]
+        }
+      }  
+    } else if(searchItem.match(facebookProfilePattern)) {
+      if(searchItem.search("facebook")) {
+        search = {
+          "profiles": [{
+            "service": "facebook",
+            "url": searchItem
+          }]
+        }
+      }  
     }
 
     axios.post(API_URL, search, {headers: header})
@@ -145,9 +148,9 @@ class App extends React.Component {
               <Grid item xs={6}>
                 <Paper className={classes.paper}>{this.state.userData.fullName}</Paper>
               </Grid>
-              {/* <Grid item xs={6}>
-                <Paper className={classes.paper}>{this.state.userData.avatar}</Paper>
-              </Grid> */}
+              <Grid item xs={6}>
+                <Paper className={classes.paper}><img src={this.state.userData.avatar} /></Paper>
+              </Grid>
               <Grid item xs={6}>
                 <Paper className={classes.paper}>{this.state.userData.title}</Paper>
               </Grid>
