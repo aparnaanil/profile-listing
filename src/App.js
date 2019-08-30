@@ -119,7 +119,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <form className={classes.container} noValidate autoComplete="off">
-          <React.Fragment>
+          
             <TextField
               id="outlined-search"
               label="Search field"
@@ -137,35 +137,41 @@ class App extends React.Component {
                 )
               }}
             />
-            
+             
   
           <Button variant="contained" color="primary" className={classes.button} onClick={this.fetchDetails}>
             Search
           </Button>
+          </form>
+          
+
+
           { this.state.userData && 
             <div className={classes.root}>
             <Grid container spacing={3}>
-              <Grid item xs={6}>
-                <Paper className={classes.paper}>{this.state.userData.fullName}</Paper>
-              </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={3}>
                 <Paper className={classes.paper}><img src={this.state.userData.avatar} /></Paper>
               </Grid>
-              <Grid item xs={6}>
-                <Paper className={classes.paper}>{this.state.userData.title}</Paper>
-              </Grid>
-              <Grid item xs={3}>
-                <Paper className={classes.paper}>{this.state.userData.email}</Paper>
-              </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={9}>
+                <Paper className={classes.paper}>{this.state.userData.fullName}</Paper>
+                  <Grid item xs={12}>
+                   <Paper className={classes.paper}>{this.state.userData.title}</Paper>
+                  </Grid>
+                   <Grid item xs={12}>
+                  <Paper className={classes.paper}>{this.state.userData.email}</Paper>
+               </Grid>
+              <Grid item xs={12}>
                 <Paper className={classes.paper}>{this.state.userData.phones}</Paper>
               </Grid>
+
+              </Grid>
+
             </Grid>
           </div>
           
           }
-          </React.Fragment>
-        </form>
+          
+       
       </div>
     );
   }

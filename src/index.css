@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+div#root {
+  margin: 0 auto;
+  display: table;
+  padding-top: 10%;
+}
+.App-textField-2 {
+  width: 100%;
+}
+.MuiButton-containedPrimary {
+  width: 39%;
+  margin: 0 auto !important;
+  text-align: center;
+  padding: 9px !important;
+}
+form.App-container-1 {
+  padding: 39px;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin: 0 auto;
+}
+.MuiPaper-rounded img {
+  width: 100%;
+}
+.App-root-4 {
+  margin-top: 37px;
+}
+.App-paper-5 {
+  margin-bottom: 15px;
+}
